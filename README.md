@@ -1,37 +1,14 @@
-## Welcome to GitHub Pages
+Mina-1316's Github Pages
+==============
 
-You can use the [editor on GitHub](https://github.com/Mina-1316/Mina-1316.github.io/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+### Roadmap 해야할 일
+- [ ] [GitHub Pages](https://pages.github.com/), [Jekyll](https://jekyllrb.com/) 가동하게 만들기
+- [ ] [bootstrap](https://getbootstrap.com/)테마로 정적 웹사이트 구축
+  - [ ] 간단한 기본적인 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Markdown grammer - 마크다운 문법
+> [Markdown 문법 참고 문서](https://guides.github.com/features/mastering-markdown/)
+> [GitHub Docs](https://docs.github.com/en)
 
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Mina-1316/Mina-1316.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+#### Text Format - 텍스트 포맷
+1. bold(두꺼운 폰트) 처리 - 
