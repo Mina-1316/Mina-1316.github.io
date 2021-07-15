@@ -28,17 +28,18 @@ Mina-1316's Github Pages
 * H1, H2는 각각 제목 아래에 '===', '---'를 작성함으로써 대체 구현 가능
 
 ##### 마크다운 사용
-  H1 Used === as Alternative
-  ==========
-  H2 Used --- as Alternative
-  ----------
-  # H1 Header
-  ## H2 Header
-  ### H3 Header
-  #### H4 Header
-  ##### H5 Header
-  ###### H6 Header
-
+```Markdown
+H1 Used === as Alternative
+==========
+H2 Used --- as Alternative
+----------
+# H1 Header
+## H2 Header
+### H3 Header
+#### H4 Header
+##### H5 Header
+###### H6 Header
+```
 위 코드를 실행할 경우
 
 H1 Used === as Alternative
@@ -77,12 +78,15 @@ Emphasis | Tag | Text Editor | Displayed
 * Blockqoutes의 위 아래 각각 한줄씩 띄워 둬 애플리케이션이 읽을 때 에러가 일어나지 않도록 조치
 
 ##### 마크다운 사용
-  > 옛날 옛적에 한 장수가 말하길
-  > 
-  >> *나의 죽음을 적에게 알리지 말라*
-  >> **이순신**
+```Markdown
+> 옛날 옛적에 한 장수가 말하길
+> 
+>> *나의 죽음을 적에게 알리지 말라*
+>> **이순신**
+```
 
 해당 코드를 실행할 경우
+
 > 옛날 옛적에 한 장수가 말하길
 > 
 >> *나의 죽음을 적에게 알리지 말라*
