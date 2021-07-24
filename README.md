@@ -81,7 +81,7 @@ Emphasis | Tag | Text Editor | Displayed
 ```Markdown
 > 옛날 옛적에 한 장수가 말하길
 > 
->> *나의 죽음을 적에게 알리지 말라*
+>> *나의 죽음을 적에게 알리지 말라*<br>
 >> **이순신**
 ```
 
@@ -89,7 +89,6 @@ Emphasis | Tag | Text Editor | Displayed
 
 > 옛날 옛적에 한 장수가 말하길
 > 
->> *나의 죽음을 적에게 알리지 말라*
+>> *나의 죽음을 적에게 알리지 말라*<br>
 >> **이순신**
-
 #### 4. Lists
