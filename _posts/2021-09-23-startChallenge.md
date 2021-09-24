@@ -1,6 +1,6 @@
 ---
 layout: post
-title: '기본적인 웹사이트 구조 생성하기 - HTML,CSS,JS의 관계와 기본적인 틀'
+title: '매주 한번 온라인저지 풀기 챌린지 시작'
 date: 2021-09-21 17:30
 folder: JudgeChallange
 tags: [programming,algorithm]
