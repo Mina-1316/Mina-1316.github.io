@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 'Notion 시작'
-date: 2021-09-21 17:30
-folder: JudgeChallange
+date: 2021-09-24 17:30
+folder: blog
 tags: [programming,algorithm]
 ---
 
