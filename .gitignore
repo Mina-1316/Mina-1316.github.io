@@ -9,7 +9,8 @@
 /coverage
 
 # production
-/build
+# /build
+# disable production data because this folder becomes hosted data.
 
 # misc
 .DS_Store
