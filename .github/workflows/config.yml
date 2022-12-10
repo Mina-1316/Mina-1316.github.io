@@ -25,8 +25,7 @@ jobs:
           GIT_AUTHOR_NAME: ${{ secrets.GIT_USER }}
           GIT_AUTHOR_EMAIL: ${{ secrets.GIT_EMAIL }}
         run: |
-          echo "configure username"
+          git remote set-url origin https://x-access-token:${{ secrets.GIT_TOKEN }}@github.com/Mina-1316/Mina-1316.github.io.git
           git config --global user.name "$GIT_AUTHOR_NAME"
-          echo "configure email"
           git config --global user.email "$GIT_AUTHOR_EMAIL"
           yarn deploy -b deploy -u "$GIT_AUTHOR_EMAIL"
