@@ -1,8 +1,13 @@
+import tw from 'tailwind-styled-components'
+
+const Title = tw.h1`
+  underline
+`
 
 export default function TestPage() {
   return (
-    <h1 className="text-3xl font-bold underline">
+    <Title>
       Test Page
-    </h1>
+    </Title>
   )
 }
