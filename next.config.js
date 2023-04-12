@@ -1,3 +1,4 @@
+const withTwin = require('./withTwin')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,4 +10,4 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig
+module.exports = withTwin(nextConfig)
