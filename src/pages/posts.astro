@@ -1,0 +1,8 @@
+---
+import { getDefaultNavMenus } from "#components/organisms/navbar";
+import DefaultLayout from "~/layouts/default-layout.astro";
+
+const menus = getDefaultNavMenus();
+---
+
+<DefaultLayout title="Recent Posts" menus={menus}> Post List</DefaultLayout>

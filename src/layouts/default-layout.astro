@@ -1,0 +1,39 @@
+---
+import Footer from "~/components/organisms/footer.tsx";
+import Navbar, { NavbarButtonGroup } from "~/components/organisms/navbar";
+import type { NavMenu } from "~/components/organisms/navbar";
+import "~/styles/global.css";
+
+interface Props {
+  title: string;
+  menus?: NavMenu[];
+}
+
+// Get menu Elements from child component
+const { title, menus = [] }: Props = Astro.props;
+---
+
+<!-- Default theme to dark - to prevent "blinking" from white to black on Navbar load -->
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body class="h-screen w-screen">
+    <div class="w-full flex flex-row h-full">
+      <div class="shrink-0 min-w-60 py-4">
+        <!-- Navbar on left side -because shadcn relies on client state - need hydration -->
+        <Navbar menus={menus} client:load>
+          <NavbarButtonGroup client:only="react" />
+        </Navbar>
+      </div>
+      <div class="grow flex w-full h-full flex-col justify-between p-8">
+        <!-- Contents on here -->
+        <slot />
+        <!-- Footer on the bottom -->
+        <Footer />
+      </div>
+    </div>
+  </body>
+</html>

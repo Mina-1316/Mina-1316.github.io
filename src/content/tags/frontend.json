@@ -1,0 +1,5 @@
+{
+  "name": "Frontend",
+  "description": "Describes about the frontend - the actual UI that user can interact/see",
+  "related": ["web"]
+}

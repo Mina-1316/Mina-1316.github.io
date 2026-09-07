@@ -1,5 +1,19 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "exclude": ["dist"],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "moduleResolution": "bundler",
+    "resolvePackageJsonImports": true,
+    "plugins": [{ "name": "@astrojs/ts-plugin" }],
+
+    "paths": {
+      "#components/*": ["./src/components/*"],
+      "#lib/*": ["./src/lib/*.ts"],
+      "#hooks/*": ["./src/hooks/*.ts"],
+      "~/*": ["./src/*"],
+    },
+  },
 }
