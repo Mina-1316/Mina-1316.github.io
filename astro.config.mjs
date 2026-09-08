@@ -12,6 +12,8 @@ import svgr from "vite-plugin-svgr";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://mina1316.dev",
+
   integrations: [react(), mdx(), pagefind(), intlayer()],
 
   vite: {
