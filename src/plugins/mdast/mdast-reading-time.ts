@@ -14,8 +14,6 @@ export const mdastReadingTimePlugin = defineMdastPlugin({
     const textOnPage = context.textContent(root);
     const readingTime = getReadingTime(textOnPage);
 
-    console.log(readingTime);
-
     // readingTime.text will give us minutes read as a friendly string,
     // i.e. "3 min read"
     context.data.astro.frontmatter.minutesRead = readingTime.text;

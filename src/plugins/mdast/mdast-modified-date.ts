@@ -14,7 +14,6 @@ export const MdastModifiedDatePlugin = defineMdastPlugin({
         `git log -1 --pretty="format:%cI" ${filepath}`,
       );
 
-      console.log(`[ModifiedDatePlugin]: "${filepath} - ${moodifiedDate}`);
       context.data.astro.frontmatter.pubDate = moodifiedDate.toString();
     } catch (e) {
       // this means - date not exists because file is not commited, or some reason - so change to current date
