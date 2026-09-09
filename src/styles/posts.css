@@ -3,28 +3,30 @@
 @layer base, posts;
 
 @layer posts {
-  h1 {
-    @apply text-2xl font-bold mt-2;
-  }
-  h2 {
-    @apply text-xl font-bold mt-2;
-  }
-  h3 {
-    @apply text-lg font-bold mt-1;
-  }
-  ul {
-    @apply list-inside list-disc;
-    li {
-      @apply mb-0.5;
+  #post-content {
+    h1 {
+      @apply text-2xl font-bold mt-2;
     }
-  }
-  ol {
-    @apply list-decimal list-outside pl-4;
-    li {
-      @apply mb-0.5;
+    h2 {
+      @apply text-xl font-bold mt-2;
     }
-  }
-  a {
-    @apply dark:text-purple-300 text-purple-700;
+    h3 {
+      @apply text-lg font-bold mt-1;
+    }
+    ul {
+      @apply list-inside list-disc;
+      li {
+        @apply mb-0.5;
+      }
+    }
+    ol {
+      @apply list-decimal list-outside pl-4;
+      li {
+        @apply mb-0.5;
+      }
+    }
+    a {
+      @apply dark:text-purple-300 text-purple-700;
+    }
   }
 }
