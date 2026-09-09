@@ -11,7 +11,7 @@ export const MdastModifiedDatePlugin = defineMdastPlugin({
     const filepath = fileURLToPath(context.fileURL);
     try {
       const moodifiedDate = execSync(
-        `git log -1 --pretty="format:%cI "${filepath}"`,
+        `git log -1 --pretty="format:%cI" ${filepath}`,
       );
 
       console.log(`[ModifiedDatePlugin]: "${filepath} - ${moodifiedDate}`);

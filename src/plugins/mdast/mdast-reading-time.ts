@@ -18,6 +18,6 @@ export const mdastReadingTimePlugin = defineMdastPlugin({
 
     // readingTime.text will give us minutes read as a friendly string,
     // i.e. "3 min read"
-    context.data.astro.frontmatter.minutesRead = readingTime.minutes;
+    context.data.astro.frontmatter.minutesRead = readingTime.text;
   },
 });
