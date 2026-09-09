@@ -1,0 +1,5 @@
+{
+  "name": "Typescript",
+  "description": "Typescript provides an type-safe subset of JavaScript that compiles to plain JavaScript.",
+  "related": ["language"]
+}
