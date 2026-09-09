@@ -50,18 +50,20 @@ function NavMenu({ menu, nestLevel }: NavMenuProps) {
   }
 
   return (
-    <div
-      id={`navmenu-${ref}`}
-      onClick={getNavigateCallback(ref)}
-      className="cursor-pointer pl-(--dynamic-padding)"
-      style={{ "--dynamic-padding": nestLevel + "rem" }}
-    >
-      {"┕ "}
-      {label}
+    <>
+      <div
+        id={`navmenu-${ref}`}
+        onClick={getNavigateCallback(ref)}
+        className="cursor-pointer pl-(--dynamic-padding) not-hover:truncate hover:underline hover:text-green-400"
+        style={{ "--dynamic-padding": nestLevel + "rem" }}
+      >
+        {"┕ "}
+        {label}
+      </div>
       {segments.map((seg) => (
         <NavMenu menu={seg} nestLevel={nestLevel + 1} />
       ))}
-    </div>
+    </>
   );
 }
 

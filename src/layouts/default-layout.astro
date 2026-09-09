@@ -22,15 +22,13 @@ const { title, menus = [] }: Props = Astro.props;
   </head>
   <body class="h-screen w-screen">
     <div class="w-full flex flex-row h-full">
-      <div class="shrink-0 min-w-60 py-4">
+      <div class="shrink-0 min-w-60 py-4 max-w-60">
         <!-- Navbar on left side -because shadcn relies on client state - need hydration -->
         <Navbar menus={menus} client:load>
           <NavbarButtonGroup client:only="react" />
         </Navbar>
       </div>
-      <div
-        class="grow flex w-full h-full flex-col justify-between p-8 overflow-y-scroll"
-      >
+      <div class="grow flex w-full h-full flex-col justify-between p-8 overflow-y-scroll">
         <!-- Contents on here -->
         <slot />
         <!-- Footer on the bottom -->

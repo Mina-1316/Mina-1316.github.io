@@ -19,8 +19,22 @@ export const getStaticPaths = (async () => {
 
 const { post } = Astro.props;
 
-const { Content, remarkPluginFrontmatter } = await render(post);
+const { Content, remarkPluginFrontmatter, headings } = await render(post);
+const filtered_headings = headings.filter((heading) => heading.depth < 3);
 const menus = getDefaultNavMenus();
+
+menus[2].segments = [
+  {
+    label: post.data.title,
+    ref: "",
+    segments: filtered_headings.map((heading) => {
+      return {
+        label: heading.text,
+        ref: `#${heading.slug}`,
+      };
+    }),
+  },
+];
 ---
 
 <DefaultLayout title={post.data.title} menus={menus}>
