@@ -1,6 +1,8 @@
-@import "tailwindcss";
+@reference "tailwindcss";
 
-@layer base {
+@layer base, posts;
+
+@layer posts {
   h1 {
     @apply text-2xl font-bold mt-2;
   }
