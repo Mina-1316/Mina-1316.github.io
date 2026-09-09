@@ -9,6 +9,7 @@ import { satteri } from "@astrojs/markdown-satteri";
 import { intlayer } from "astro-intlayer";
 import { MdastModifiedDatePlugin } from "~/plugins/mdast/mdast-modified-date";
 import svgr from "vite-plugin-svgr";
+import { mdastReadingTimePlugin } from "~/plugins/mdast/mdast-reading-time";
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,7 +23,7 @@ export default defineConfig({
 
   markdown: {
     processor: satteri({
-      mdastPlugins: [MdastModifiedDatePlugin],
+      mdastPlugins: [MdastModifiedDatePlugin, mdastReadingTimePlugin],
     }),
   },
 });

@@ -25,7 +25,9 @@ const menus = getDefaultNavMenus();
 
 <DefaultLayout title={post.data.title} menus={menus}>
   <div>
-    <h1>{post.data.title}</h1>
+    <p>{post.data.title}</p>
+    <p>{remarkPluginFrontmatter.pubDate}</p>
+    <p>{remarkPluginFrontmatter.minutesRead}</p>
     <Content />
   </div>
 </DefaultLayout>
