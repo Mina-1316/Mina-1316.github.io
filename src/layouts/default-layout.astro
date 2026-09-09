@@ -28,7 +28,9 @@ const { title, menus = [] }: Props = Astro.props;
           <NavbarButtonGroup client:only="react" />
         </Navbar>
       </div>
-      <div class="grow flex w-full h-full flex-col justify-between p-8">
+      <div
+        class="grow flex w-full h-full flex-col justify-between p-8 overflow-y-scroll"
+      >
         <!-- Contents on here -->
         <slot />
         <!-- Footer on the bottom -->
