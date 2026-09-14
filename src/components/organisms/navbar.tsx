@@ -2,6 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "#components/shadcn/avatar";
 import profile from "~/assets/img/profile.jpg?url";
 import ButtonGroup from "./navbar/button-group";
 import { Locales, type Locale } from "intlayer";
+import CaretRightIcon from "~/assets/ico/caret-right.svg?react";
 
 interface NavMenuProps {
   menu: NavMenu;
@@ -56,10 +57,10 @@ function NavMenu({ menu, nestLevel }: NavMenuProps) {
       <div
         id={`navmenu-${ref}`}
         onClick={getNavigateCallback(ref)}
-        className="cursor-pointer pl-(--dynamic-padding) not-hover:truncate hover:underline hover:text-green-400"
+        className="cursor-pointer pl-(--dynamic-padding) not-hover:truncate hover:underline hover:text-green-400 fill-current"
         style={{ "--dynamic-padding": nestLevel + "rem" }}
       >
-        {"┕ "}
+        <CaretRightIcon className="inline size-5" />
         {label}
       </div>
       {segments.map((seg) => (
@@ -69,7 +70,7 @@ function NavMenu({ menu, nestLevel }: NavMenuProps) {
   );
 }
 
-export default function Navbar({ menus, locale, children }: Props) {
+export default function Navbar({ menus, children }: Props) {
   return (
     <div
       className="flex flex-col py-8 px-3 gap-3 border-r-gray-800 border-r h-full"
