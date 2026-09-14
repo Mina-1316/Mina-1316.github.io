@@ -50,7 +50,7 @@ const menus = getDefaultNavMenus(locale);
     if (loading || done) return;
 
     loading = true;
-    const url = `${localePrefix}/posts/fragment/${page}`;
+    const url = `${localePrefix}/posts/fragment/${page}/`;
 
     const res = await fetch(url);
     if (!res.ok) {
