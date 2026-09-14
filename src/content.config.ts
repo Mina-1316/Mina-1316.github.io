@@ -1,13 +1,12 @@
 import { defineCollection, reference } from "astro:content";
-
 import { glob, file } from "astro/loaders";
-
 import { z } from "astro/zod";
 
 const post = defineCollection({
   loader: glob({ base: "./src/content/posts", pattern: "./**/*.{md,mdx}" }),
   schema: z.object({
     title: z.string(),
+    locale: z.enum(["en", "ko"]),
     tags: z.array(reference("tags")),
   }),
 });

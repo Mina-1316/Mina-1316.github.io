@@ -1,0 +1,18 @@
+---
+import { getDefaultNavMenus } from "#components/organisms/navbar";
+import { DEFAULT_LOCALE } from "#lib/locale";
+import { getLocaleFromPath, getPrefix, localeMap } from "intlayer";
+import DefaultLayout from "~/layouts/default-layout.astro";
+
+export const getStaticPaths = () =>
+  localeMap(({ locale }) => ({
+    params: { locale: getPrefix(locale).localePrefix },
+  }));
+
+const locale = getLocaleFromPath(Astro.params.locale) ?? DEFAULT_LOCALE;
+const menus = getDefaultNavMenus(locale);
+---
+
+<DefaultLayout title="About Me" , menus={menus} locale={locale}>
+  About{" "}
+</DefaultLayout>

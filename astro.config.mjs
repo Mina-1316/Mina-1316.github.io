@@ -15,7 +15,17 @@ import { mdastReadingTimePlugin } from "~/plugins/mdast/mdast-reading-time";
 export default defineConfig({
   site: "https://mina1316.dev",
 
-  integrations: [react(), mdx(), pagefind(), intlayer()],
+  integrations: [
+    react(),
+    mdx(),
+    pagefind({
+      indexConfig: {
+        rootSelector: "#pagefind-index",
+        excludeSelectors: ["#navbar"],
+      },
+    }),
+    intlayer(),
+  ],
 
   vite: {
     plugins: [tailwindcss(), svgr()],

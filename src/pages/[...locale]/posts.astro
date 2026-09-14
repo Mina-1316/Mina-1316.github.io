@@ -1,0 +1,77 @@
+---
+import { getDefaultNavMenus } from "#components/organisms/navbar";
+import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
+import DefaultLayout from "~/layouts/default-layout.astro";
+import NoteIcon from "~/assets/ico/note.svg";
+import { localeMap, getPrefix, getIntlayer, getLocaleFromPath } from "intlayer";
+import "~/styles/searchbox.css";
+import { DEFAULT_LOCALE, getLocalePrefix } from "#lib/locale";
+
+export const getStaticPaths = () =>
+  localeMap(({ locale }) => ({
+    params: { locale: getPrefix(locale).localePrefix },
+  }));
+
+const locale = getLocaleFromPath(Astro.params.locale) ?? DEFAULT_LOCALE;
+const localePrefix = getLocalePrefix(locale);
+
+const { title, description_1, description_2 } = getIntlayer("posts", locale);
+
+const menus = getDefaultNavMenus(locale);
+---
+
+<PagefindConfig instance="post-search" lang={locale} preload={true} />
+<DefaultLayout title="Recent Posts" menus={menus} locale={locale}>
+  <div class="ml-8 mr-12 mt-10">
+    <div class="mb-5">
+      <p class="text-4xl font-bold fill-current mb-3">
+        <NoteIcon class="inline" />
+        {title}
+      </p>
+      <p class="text-xl">{description_1}</p>
+      <p class="text-xl">{description_2}</p>
+    </div>
+    <div>
+      <pagefind-searchbox instance="post-search"></pagefind-searchbox>
+    </div>
+    <div class="flex flex-col gap-2 my-3 max-w-2/3" id="post-list"></div>
+    <div id="scroll-sentinel" />
+  </div>
+</DefaultLayout>
+<script define:vars={{ localePrefix }} is:inline>
+  const container = document.getElementById("post-list");
+  const sentinel = document.getElementById("scroll-sentinel");
+
+  let page = 1;
+  let loading = false;
+  let done = false;
+
+  async function loadNextFragment() {
+    if (loading || done) return;
+
+    loading = true;
+    const url = `${localePrefix}/posts/fragment/${page}`;
+
+    const res = await fetch(url);
+    if (!res.ok) {
+      done = true;
+      observer.disconnect();
+      loading = false;
+      console.log("fragment hit bottom maybe");
+      return;
+    }
+    const html = await res.text();
+    container.insertAdjacentHTML("beforeend", html);
+    page += 1;
+    loading = false;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting) loadNextFragment();
+    },
+    { rootMargin: "200px" },
+  );
+
+  observer.observe(sentinel);
+</script>

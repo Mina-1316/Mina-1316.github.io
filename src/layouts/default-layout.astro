@@ -1,4 +1,5 @@
 ---
+import type { Locale } from "intlayer";
 import Footer from "~/components/organisms/footer.tsx";
 import Navbar, { NavbarButtonGroup } from "~/components/organisms/navbar";
 import type { NavMenu } from "~/components/organisms/navbar";
@@ -7,20 +8,22 @@ import "~/styles/global.css";
 interface Props {
   title: string;
   menus?: NavMenu[];
+  locale: Locale;
+  do_index?: boolean;
 }
 
 // Get menu Elements from child component
-const { title, menus = [] }: Props = Astro.props;
+const { title, menus = [], locale, do_index }: Props = Astro.props;
 ---
 
 <!-- Default theme to dark - to prevent "blinking" from white to black on Navbar load -->
-<html lang="en" class="dark">
+<html lang={locale} class="dark" {...(do_index && { id: "pagefind-index" })}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
   </head>
-  <body class="h-screen w-screen">
+  <body class="h-screen w-screen overflow-hidden">
     <div class="w-full flex flex-row h-full">
       <div class="shrink-0 min-w-60 py-4 max-w-60">
         <!-- Navbar on left side -because shadcn relies on client state - need hydration -->

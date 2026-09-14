@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "#components/shadcn/avatar";
 import profile from "~/assets/img/profile.jpg?url";
 import ButtonGroup from "./navbar/button-group";
+import { Locales, type Locale } from "intlayer";
 
 interface NavMenuProps {
   menu: NavMenu;
@@ -22,25 +23,26 @@ interface Props {
 
 export const NavbarButtonGroup = ButtonGroup;
 
-export function getDefaultNavMenus(): NavMenu[] {
+export function getDefaultNavMenus(locale: Locale = Locales.KOREAN): NavMenu[] {
+  const locale_prefix = locale === Locales.ENGLISH ? "/en" : "";
   return [
     {
       label: "Home",
-      ref: "/",
+      ref: locale_prefix + "/",
     },
     {
       label: "About",
-      ref: "/about",
+      ref: locale_prefix + "/about",
     },
     {
       label: "Posts",
-      ref: "/posts",
+      ref: locale_prefix + "/posts",
     },
   ];
 }
 
 function NavMenu({ menu, nestLevel }: NavMenuProps) {
-  let { label, ref, segments = [] } = menu;
+  const { label, ref, segments = [] } = menu;
 
   function getNavigateCallback(path: string): () => void {
     // Browser is already smart enough to handle same path - just pass it through window.location.href
@@ -67,9 +69,12 @@ function NavMenu({ menu, nestLevel }: NavMenuProps) {
   );
 }
 
-export default function Navbar({ menus, children }: Props) {
+export default function Navbar({ menus, locale, children }: Props) {
   return (
-    <div className="flex flex-col py-8 px-3 gap-3 border-r-gray-800 border-r h-full">
+    <div
+      className="flex flex-col py-8 px-3 gap-3 border-r-gray-800 border-r h-full"
+      id="navbar"
+    >
       <div className="flex flex-row  font-bold text-xl gap-2 items-center grow-0">
         <Avatar size="lg" className="border-2 border-primary">
           <AvatarImage src={profile} alt="Profile Image" />

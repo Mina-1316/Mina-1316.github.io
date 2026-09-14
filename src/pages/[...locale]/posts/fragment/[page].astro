@@ -1,0 +1,65 @@
+---
+import { getTagsMap } from "#lib/content_cache/tags";
+import { getContentKey } from "#lib/path";
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import { localeMap, getPrefix } from "intlayer";
+
+// This builds static components for post lists - not for actual user's view
+// Make sure this pages aren't exposed by pagemap or pagefind
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await Promise.all(
+    (await getCollection("post")).map(async (post) => {
+      return {
+        post: post,
+        renderResult: await render(post),
+      };
+    }),
+  );
+
+  const paths = localeMap(({ locale }) =>
+    paginate(
+      posts
+        .filter((p) => p.post.data.locale === locale)
+        .toSorted((a, b) => {
+          const aPubDate = a.renderResult.remarkPluginFrontmatter.pubDate;
+          const bPubDate = b.renderResult.remarkPluginFrontmatter.pubDate;
+          // Compare string dates - older as last
+          if (aPubDate > bPubDate) {
+            return -1;
+          }
+          if (aPubDate < bPubDate) {
+            return 1;
+          }
+          return 0;
+        }),
+      {
+        params: { locale: getPrefix(locale).localePrefix },
+        pageSize: 10, // Element counts per page
+      },
+    ),
+  );
+
+  return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const all_tags = await getTagsMap();
+---
+
+{page.data.map((renderedPost) => {
+  if (renderedPost.post.filePath === undefined) return undefined;
+  const { remarkPluginFrontmatter } = renderedPost.renderResult;
+  const { title, tags } = renderedPost.post.data;
+  const postLink = "/post/" + getContentKey(renderedPost.post.filePath);
+  return (
+    <div class="p-3 border-2 rounded text-sm">
+      <a href={postLink}>
+        <h1 class="font-bold">{title}</h1>
+      </a>
+      <h2>{remarkPluginFrontmatter.pubDate}</h2>
+      <h2>{tags.map((t) => all_tags.get(t.id)?.data.name).join(" / ")}</h2>
+    </div>
+  );
+})}
