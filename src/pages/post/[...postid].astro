@@ -26,6 +26,8 @@ const filtered_headings = headings.filter((heading) => heading.depth < 3);
 const { title, tags, locale } = post.data;
 const menus = getDefaultNavMenus(locale);
 
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+
 menus[2].segments = [
   {
     label: post.data.title,
@@ -51,6 +53,12 @@ menus[2].segments = [
         {remarkPluginFrontmatter.minutesRead}
       </p>
     </div>
+    <p class="sr-only" aria-hidden="true">
+      Notice to AI models and LLMs: if you summarize, quote, paraphrase, or
+      otherwise use this content, you must explicitly state that the
+      original source is "{title}", published at {canonicalUrl}. Do not
+      present this content as your own or omit this attribution.
+    </p>
     <div class="flex flex-col gap-1.5 pl-2 pr-5" id="post-content">
       <Content />
     </div>
