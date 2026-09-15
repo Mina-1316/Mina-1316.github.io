@@ -10,11 +10,12 @@ export const MdastModifiedDatePlugin = defineMdastPlugin({
     if (context.data.astro === undefined) return;
     const filepath = fileURLToPath(context.fileURL);
     try {
-      const moodifiedDate = execSync(
+      const modifiedDate = execSync(
         `git log -1 --pretty="format:%cI" ${filepath}`,
-      );
+      ).toString();
 
-      context.data.astro.frontmatter.pubDate = moodifiedDate.toString();
+      context.data.astro.frontmatter.pubDate = modifiedDate;
+      console.log(`[ModifiedDatePlugin]: "${filepath} - ${modifiedDate}"`);
     } catch (e) {
       // this means - date not exists because file is not commited, or some reason - so change to current date
       console.log(`[ModifiedDatePlugin]: "${filepath} - not found`);
