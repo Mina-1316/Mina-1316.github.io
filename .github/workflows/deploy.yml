@@ -18,22 +18,38 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/cache@v4
+        name: Pull git history cache
+        with:
+          path: .git
+          key: git-history-#{{ github.sha }}
+          restore-keys: |
+            git-history-
+
       - uses: actions/checkout@v4
         name: Checkout code
+        with:
+          fetch-depth: 0
+          filter: blob:none
+
       - uses: pnpm/action-setup@v4
         name: Set pnpm
         with:
           version: 9
+
       - uses: actions/setup-node@v4
         name: Set up Node.js
         with:
           node-version: 22
           run_install: false
           cache: pnpm
+
       - run: pnpm install --frozen-lockfile
         name: Install dependencies
+
       - run: pnpm run build
         name: Build site
+
       # https://github.com/actions/upload-pages-artifact
       - uses: actions/upload-pages-artifact@v3
         name: Upload Artifact
