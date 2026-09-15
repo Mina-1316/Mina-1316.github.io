@@ -1,0 +1,188 @@
+---
+title: Create my own devlog/portfolio 1 - Astro's Hydration/Dehydration with Shadcn
+tags: [frontend]
+locale: en
+---
+
+import Callout from "#components/molecules/callout.tsx";
+
+<Callout type="info" title="Automatically Translated post">
+
+This document is automatically translated from [Original Post](/post/create-blog), used Opus 4.8 LLM for trnslation.
+
+</Callout>
+
+As I migrated my blog from a Gatsby-based setup to an Astro-based one, I thought I'd write up a brief account of developing the dev blog.
+
+## What is Astro?
+
+[Astro project website](https://astro.build/)
+
+Astro is a framework for content-focused web page development. Unlike UI frameworks such as React that use the SPA (Single Page Application) approach, Astro focuses on static website generation.
+
+**Advantages**
+
+- It aims to compile every page into a static website, maximizing the resulting performance benefits.
+- When indexed by web search engines, the page is already a fully-formed web page at index time, so search accuracy is far higher.
+- Because it is template-based—you define the structure first and then write the content—duplicated code is drastically reduced and everything becomes more concise.
+- It supports a variety of UI frameworks such as React, Vue, and Svelte, while still being able to convert all of these UI components into a single static website.
+- It supports many content types (Markdown, Json, MDX, etc.), and interoperability between different content types is also connected very smoothly.
+- These content types, UI frameworks, and various pre-/post-processing features are supported in the form of integrations, making them easy to install/remove, and it's not difficult to add the features you need yourself.
+
+**Disadvantages**
+
+- Ultimately, you have to bake everything in at build time to reap the performance benefits, so the build process becomes complex and takes a long time.
+- Since you can't make every page fully static after all (some logic requires JS), you have to decide how much to handle on the client side, and this part can be very unintuitive and hard to understand.
+- Compared to an SPA web page, it ends up with all the drawbacks that SSR/SSG web pages have (making a web request when navigating to another page, the page showing a loading state until the load completes).
+- Ultimately, given the nature of a static site generator where the code's structure and content are determined by things outside the code (the filesystem, external API/database requests, data definitions such as json, etc.), it doesn't support a fully trustworthy type system (you often have to use incomplete/ambiguous types such as any, {"Map<string, any>"}, etc.).
+
+Despite all this, the reasons I chose Astro are as follows.
+
+1. Among the static site generators that currently exist, it offers the widest type-safety support (relatively speaking)
+   One of the biggest drawbacks of many static site generators is that type safety for metadata, content types, generated information, and so on is very low (in particular, I think I ran into a lot of related problems when using GatsbyJS).
+   Astro, in my experience, provides the **relatively** most solid type safety among the static-site build utilities you can currently choose, through type files that it generates itself.
+2. You can use UI libraries other than React.
+   As I also noted in the advantages above, you can use frameworks like Vue and Svelte too. Considering that this web page could be used not just as a space to write posts but also as a portfolio and as a practice ground, the fact that the UI framework isn't locked in gave it quite a few extra points in the decision.
+3. A very high level of documentation, even compared to other projects
+   Astro is among the very well-documented open source projects. Since its own CLI, configuration, and component definition syntax (Astro uses .astro files to define internal components/layouts) are all new, a high level of documentation was one of the very important considerations. In fact, while developing, there were cases where searching within the docs or finding and using an example was far faster and more economical than directly asking an AI or the like.
+   On top of this—because I'm really bad at design—I used Claude Design to lay out the basic web page framework, and implemented the UI using [shadcn/ui](https://ui.shadcn.com/).
+   ![Mockup design created by Claude Design](./claude_design_img.png)
+
+## React, Astro, Shadcn, static websites.
+
+In the early stages there wasn't anything particularly difficult. The syntax wasn't that hard to understand, and since I was already somewhat used to SSR/SSG, I had at least a shallow grasp of concepts like Hydration, so I wrote things so that as many components as possible would compile statically—but then problems began.
+
+### shadcn/ui doesn't get along well with static site generators.
+
+The problem started while developing the Navbar on the left side. I was trying to display my profile image using `Avatar`, but it just showed an empty image and nothing was processed.
+
+```ts
+/**
+ * The image to be displayed in the avatar.
+ * Renders an `<img>` element.
+ *
+ * Documentation: [Base UI Avatar](https://base-ui.com/react/components/avatar)
+ */
+export declare const AvatarImage: React.ForwardRefExoticComponent<
+  Omit<AvatarImageProps, "ref"> & React.RefAttributes<HTMLImageElement>
+>;
+export interface AvatarImageState extends AvatarRootState {
+  /**
+   * The transition status of the component.
+   */
+  transitionStatus: TransitionStatus;
+}
+export interface AvatarImageProps extends BaseUIComponentProps<
+  "img",
+  AvatarImageState,
+  React.ComponentPropsWithRef<"img">
+> {
+  /**
+   * Callback fired when the loading status changes.
+   */
+  onLoadingStatusChange?: ((status: ImageLoadingStatus) => void) | undefined;
+}
+export declare namespace AvatarImage {
+  type State = AvatarImageState;
+  type Props = AvatarImageProps;
+}
+```
+
+The problem was this—in order to dynamically load `AvatarImage` in BaseUI, shadcn's internal UI library, it manages `TransitionStatus` as state internally, and at the point when Astro compiles, `AvatarImage` gets dehydrated in an unloaded state, which caused the issue.
+
+The bigger problem is that, since shadcn/ui relies heavily on React's internal state management, these kinds of lazy-loading issues are expected to keep occurring.
+
+### The solution - aiming to exclude components that require state management as much as possible
+
+[Astro - Client Directives](https://docs.astro.build/en/reference/directives-reference/#client-directives)
+
+In Astro, you can decide how a component gets hydrated through a method called Client Directives. If you don't use this method, by default every component compiles to static HTML/CSS only, and here all the JS inside `AvatarImage` that carries out the sequence of "set the initial value > load the image > update the component with the loaded image" got dehydrated, which is why the image wasn't loading.
+
+So—to hydrate the `Navbar` component on the client, I added `client:load`.
+
+<Callout type="info" title="client:load">
+
+`client:load` is a directive that, when the component mounts on the client,
+immediately fetches the Hydration JS from the server and runs it on the client.
+
+</Callout>
+```astro
+<!-- default-layout.astro -->
+<div class="shrink-0 min-w-60 py-4">
+  <!-- Navbar on left side -because shadcn relies on client state - need hydration -->
+  <Navbar menus={menus} client:load />
+</div>
+```
+
+```tsx
+/* Navbar.tsx */
+<Avatar size="lg" className="border-2 border-primary">
+  <AvatarImage src={profile} alt="Profile Image" />
+  <AvatarFallback>MC</AvatarFallback>
+</Avatar>
+```
+
+By doing this, the Avatar component stays dehydrated (since it won't have loaded the image, it will display the AvatarFallback first), and when the client hydrates, the hooks registered on the component run and the image can be loaded through the `AvatarImage` component.
+
+I thought this had solved the problem—but I ran into a new one again.
+
+### Components that use LocalStorage can't be dehydrated
+
+The problem came up again with the night/day mode toggle.
+
+```tsx
+let [theme, setTheme] = useLocalStorage("theme", "dark");
+
+useEffect(() => {
+  // Set document's theme class to currently selected theme
+  document.documentElement.className = theme;
+}, [theme]);
+
+function handleThemeButtonClick() {
+  let oppositeTheme = theme === "light" ? "dark" : "light";
+  setTheme(oppositeTheme);
+}
+```
+
+When the component first mounts, this code connects to LocalStorage, and when Astro dehydrates, it calls the LocalStorage API, which started causing errors (naturally—LocalStorage is a Web API, after all).
+
+Because the LocalStorage value is needed when the component first initializes, for now I changed the `client:load` I had set on `Navbar` above to `client:only="react"` so that `Navbar` starts rendering on the client.
+
+The problem was solved—but now I could visibly see the Navbar appearing after the page loaded (which, in a sense, is natural since all the DOM is rendered on the client).
+
+Ultimately, to solve this, I needed to render only the `Button` inside `Navbar` on the client and hydrate the rest using `client:init`, so that the Navbar shows up immediately.
+
+```tsx
+export default function Navbar({ menus, children }: Props) {
+  return (
+    <div className="flex flex-col py-8 px-3 gap-3 border-r-gray-800 border-r h-full">
+      {/* code omitted */}
+      {children}
+      {/* code omitted */}
+    </div>
+  );
+}
+```
+
+```astro
+<div class="shrink-0 min-w-60 py-4">
+  <!-- Navbar on left side -because shadcn relies on client state - need hydration -->
+  <Navbar menus={menus} client:load>
+    <NavbarButtonGroup client:only="react" />
+  </Navbar>
+</div>
+```
+
+So—by having `Navbar` receive `NavbarButtonGroup` as `children` and setting it to `client:only`, I limited the part that the client renders from the start to just the buttons.
+
+![Completed Navbar](./completed_navbar.png)
+
+Here one shortcoming of the tsx-astro relationship comes to light (though I actually think it's closer to an inevitable structural issue): you can't define Client Directives on anything other than components defined as .astro.
+
+That's why I couldn't use `client:only` inside `Navbar` and had to pass it as children within the .astro file.
+
+## Wrapping up
+
+At the time of writing, the website isn't finished yet. More than anything, what I currently expect to be the biggest problem is how to handle the components inside mdx that need Hydration.
+
+Since it's hard to provide Client Directives to them directly, I plan to first finish the styling/cleanup and then try things out and write an additional post about it.
