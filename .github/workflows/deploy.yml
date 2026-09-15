@@ -22,7 +22,7 @@ jobs:
         name: Pull git history cache
         with:
           path: .git
-          key: git-history-#{{ github.sha }}
+          key: git-history-${{ github.sha }}
           restore-keys: |
             git-history-
 
